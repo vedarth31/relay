@@ -1,54 +1,13 @@
-import fs from 'fs';
-import path from 'path';
 import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
+import { loadOAuthClient } from '@/app/lib/googleAuth';
 
-const TOKEN_PATH = path.join(process.cwd(), 'token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
-
-// Load credentials from file
-async function loadCredentials() {
-  try {
-    const content = fs.readFileSync(CREDENTIALS_PATH, 'utf-8');
-    return JSON.parse(content);
-  } catch (error) {
-    console.error('Error loading credentials:', error);
-    throw new Error('Failed to load credentials');
-  }
-}
-
-async function authorize() {
-  const credentials = await loadCredentials();
-  const { client_secret, client_id, redirect_uris } = credentials.web;
-  const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-
-  // Load existing tokens
-  if (fs.existsSync(TOKEN_PATH)) {
-    const token = fs.readFileSync(TOKEN_PATH, 'utf-8');
-    oAuth2Client.setCredentials(JSON.parse(token));
-  } else {
-    throw new Error('Token not found. Please authorize the application first.');
-  }
-
-  const now = (new Date()).getTime();
-  const expiryDate = oAuth2Client.credentials.expiry_date || 0;
-
-  if (expiryDate <= now + 5 * 60 * 1000) {
-    const newTokens = await oAuth2Client.refreshAccessToken();
-    oAuth2Client.setCredentials(newTokens.credentials);
-    fs.writeFileSync(TOKEN_PATH, JSON.stringify(oAuth2Client.credentials, null, 2));
-  }
-
-  return oAuth2Client;
-}
-
-// List messages function
 async function listMessages(auth: OAuth2Client, senders: string[]) {
   const gmail = google.gmail({ version: 'v1', auth });
   const query = senders.map(sender => `from:${sender}`).join(' OR ');
 
-  const res = await gmail.users.messages.list({ userId: 'me', q: query, maxResults: 15 });
+  const res = await gmail.users.messages.list({ userId: 'me', q: query, maxResults: 1 });
   const messages = res.data.messages || [];
 
   if (!messages.length) {
@@ -101,7 +60,7 @@ async function listMessages(auth: OAuth2Client, senders: string[]) {
 
 export async function GET() {
   try {
-    const auth: OAuth2Client = await authorize();
+    const auth: OAuth2Client = await loadOAuthClient();
     const allowedSenders = [
       'vedarth31@gmail.com',
     ];

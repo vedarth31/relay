@@ -18,13 +18,30 @@ const GmailComponent = () => {
     const [emails, setEmails] = useState<Email[]>([]);
 
     useEffect(() => {
-        const fetchEmails = async () => {
-            const response = await fetch('/api/gmail'); // Ensure this points to your API route
-            const data = await response.json();
-            setEmails(data);
+        // sse connection
+        const eventSource = new EventSource('/api/notifications');
+
+        eventSource.onmessage = async (event) => {
+            const newEmail = JSON.parse(event.data);
+            const { historyId } = newEmail;
+            // console.log('New Email Received:', newEmail);
+
+            try {
+                const response = await fetch(`/api/gmail/getEmail?historyId=${historyId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch emails');
+                }
+                const fetchedEmails: Email[] = await response.json();
+                // console.log('Fetched Emails:', fetchedEmails);                
+                setEmails((prev) => [...fetchedEmails, ...prev]);
+            } catch (err) {
+                console.error('Error fetching emails:', err);
+            }
         };
 
-        fetchEmails();
+        return () => {
+            eventSource.close();
+        };
     }, []);
 
     console.log("emails: ", emails);

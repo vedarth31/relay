@@ -4,7 +4,7 @@ import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
 
 // Define the scopes and paths
-const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/pubsub'];
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 
 // Load credentials from file
