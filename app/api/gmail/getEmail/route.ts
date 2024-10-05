@@ -1,7 +1,7 @@
 import { google } from 'googleapis';
 import { NextRequest, NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
-import { loadOAuthClient } from '@/app/lib/googleAuth';
+import { loadOAuthClient } from '../../../lib/googleAuth';
 
 async function fetchEmails(auth: OAuth2Client, historyId: string) {
     const gmail = google.gmail({ version: 'v1', auth });
@@ -15,9 +15,9 @@ async function fetchEmails(auth: OAuth2Client, historyId: string) {
     const messages = res.data.messages || [];
     const emailData = [];
 
-    const meenIdPattern = /MEEN - (\d{3})/;
-    const statusPattern = /(placed|Placed|ordered|Ordered|shipped|Shipped|delivered|Delivered|received|Received)/;
-    const trackingPattern = /FedEx\s+([A-Za-z0-9]+)/;
+    // const meenIdPattern = /MEEN - (\d{3})/;
+    // const statusPattern = /(placed|Placed|ordered|Ordered|shipped|Shipped|delivered|Delivered|received|Received)/;
+    // const trackingPattern = /FedEx\s+([A-Za-z0-9]+)/;
   
     for (const message of messages) {
       if (message.id) {
@@ -35,23 +35,23 @@ async function fetchEmails(auth: OAuth2Client, historyId: string) {
           body = Buffer.from(data, 'base64').toString('utf-8');
         }
   
-        const idMatch = body.match(meenIdPattern);
-        const orderId = idMatch ? "MEEN - " + idMatch[1] : null;
+        // const idMatch = body.match(meenIdPattern);
+        // const orderId = idMatch ? "MEEN - " + idMatch[1] : null;
   
-        const statusMatch = body.match(statusPattern);
-        const orderStatus = statusMatch ? statusMatch[1] : null;
+        // const statusMatch = body.match(statusPattern);
+        // const orderStatus = statusMatch ? statusMatch[1] : null;
   
-        const trackingMatch = body.match(trackingPattern);
-        const trackingNumber = trackingMatch ? trackingMatch[1] : null;
+        // const trackingMatch = body.match(trackingPattern);
+        // const trackingNumber = trackingMatch ? trackingMatch[1] : null;
   
         emailData.push({
           sender,
           subject,
           snippet,
           body,
-          orderId,
-          orderStatus,
-          trackingNumber,
+          // orderId,
+          // orderStatus,
+          // trackingNumber,
         });
       }
     }

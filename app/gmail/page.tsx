@@ -7,11 +7,11 @@ import sanitizeHtml from 'sanitize-html';
 interface Email {
     sender: string;
     subject: string;
-    snippet: string;
     body: string;
     orderId: string;
     orderStatus: string;
     trackingNumber: string;
+    price: string;
 }
 
 const GmailComponent = () => {
@@ -24,7 +24,7 @@ const GmailComponent = () => {
         eventSource.onmessage = async (event) => {
             const newEmail = JSON.parse(event.data);
             const { historyId } = newEmail;
-            // console.log('New Email Received:', newEmail);
+            console.log('New Email Received:', newEmail);
 
             try {
                 const response = await fetch(`/api/gmail/getEmail?historyId=${historyId}`);
@@ -32,8 +32,26 @@ const GmailComponent = () => {
                     throw new Error('Failed to fetch emails');
                 }
                 const fetchedEmails: Email[] = await response.json();
-                // console.log('Fetched Emails:', fetchedEmails);                
+                // console.log('Fetched Emails:', fetchedEmails);
                 setEmails((prev) => [...fetchedEmails, ...prev]);
+            
+                // console.log("sending request to openai");
+                // const statusResponse = await fetch(`/api/gpt?query=${encodeURIComponent(sanitizeHtml(fetchedEmails[0].body))}`);
+                // if (!statusResponse.ok) {
+                //     throw new Error('Failed to fetch order status');
+                // }
+                // const statusData = await statusResponse.json();
+                // console.log("statusData", statusData);
+
+                // // Update the order status in emails
+                // setEmails((prev) =>
+                //     prev.map((email) =>
+                //         email.orderId === fetchedEmails[0].orderId ? { ...email, orderStatus: statusData.message } : email
+                //     )
+                // );
+
+
+                //
             } catch (err) {
                 console.error('Error fetching emails:', err);
             }
@@ -62,7 +80,6 @@ const GmailComponent = () => {
                     <li key={index} className="p-4 border rounded-lg shadow-md bg-gray-200 text-black">
                         <p className="font-semibold mb-2"><strong>From:</strong> {email.sender}</p>
                         <p className="font-semibold mb-2"><strong>Subject:</strong> {email.subject}</p>
-                        <p className="mb-2"><strong>Snippet:</strong> {email.snippet}</p>
                         <div>
                             <strong>Body:</strong>
                             <div

@@ -3,11 +3,9 @@ import path from 'path';
 import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
 
-// Define the paths
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 
-// Load credentials from file
 async function loadCredentials() {
   try {
     const content = fs.readFileSync(CREDENTIALS_PATH, 'utf-8');
@@ -18,7 +16,6 @@ async function loadCredentials() {
   }
 }
 
-// Exchange authorization code for tokens
 async function exchangeCodeForToken(code: string) {
   const credentials = await loadCredentials();
   const { client_secret, client_id, redirect_uris } = credentials.web;
@@ -27,7 +24,6 @@ async function exchangeCodeForToken(code: string) {
   const { tokens } = await oAuth2Client.getToken(code);
   oAuth2Client.setCredentials(tokens);
 
-  // Save the token to disk for later use
   fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens));
   console.log('Token stored to', TOKEN_PATH);
 }
