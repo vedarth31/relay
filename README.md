@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# relay
 
-## Getting Started
+formula electric order management system
 
-First, run the development server:
+## step one: setup database
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. on mac OS, in order to install postgresql, just run in your terminal:
+``` brew install postgresql```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    follow instructions online for windows. 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. then run:
+```brew services start postgresql```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. verify install by running:
+```psql --version```
 
-## Learn More
+4. access the postgres shell as a default user:
+```psql postgres```
 
-To learn more about Next.js, take a look at the following resources:
+    if you get a "command not found" error, you might need to add PostgreSQL to your PATH or use the full path to psql.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. create a new db user:
+```CREATE USER myuser WITH PASSWORD 'mypassword';```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    replace 'myuser' and 'mypassword' with whatever you want.
 
-## Deploy on Vercel
+6. create a new database:
+```CREATE DATABASE order_management_db OWNER myuser;```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+7. grant needed perms:
+```GRANT ALL PRIVILEGES ON DATABASE order_management_db TO myuser;```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    ```ALTER USER myuser CREATEDB;```
+
+8. exit shell:
+```\q```
+
+## step two: setup environment variables
+
+1. create a .env file in the root of the project
+
+2. in the .env, add this line:
+```DATABASE_URL="postgresql://myuser:mypassword@localhost:5432/order_management_db?schema=public"```
+
+    replace myuser, mypassword, and order_management_db with your actual database username, password, and name.
+
+## step three: init prisma
+
+1. run this from the terminal in the root of the project:
+```npm install prisma @prisma/client```
+```npm install ts-node typescript @types/node --save-dev```
+
+2. same place:
+```npx prisma init```
+
+3. then:
+```npx prisma generate```
+
+    ```npx prisma migrate dev --name init```
+
+4. same place, run:
+```npm run seed```
+
+    you should see:
+```Database has been seeded. 🌱```
+
+5. verify the db:
+```npx prisma studio```
+
+    this opens a web interface at http://localhost:5555. navigate through and make sure the data from seed.ts in the prisma folder is there. if so, all is good! if not, contact athul.
+
+

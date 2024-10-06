@@ -1,0 +1,88 @@
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  role      Role
+  subteam   String
+  orders    Order[]  @relation("UserOrders")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ENGINEER
+  FINANCE
+  OPERATIONS
+  BUSINESS
+}
+
+model Order {
+  id               Int       @id @default(autoincrement())
+  internalOrderId  String    @unique
+  meenOrderId      String?   // Nullable until assigned
+  name             String
+  user             User      @relation("UserOrders", fields: [userId], references: [id])
+  userId           Int
+  subteam          String
+  status           OrderStatus
+  vendor           String
+  totalCost        Float     @default(0.0)
+  costVerified     Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  items            Item[]    @relation("OrderItems")
+  supportingDocs   Document[]
+}
+
+enum OrderStatus {
+  TO_ORDER
+  PLACED
+  PROCESSED
+  SHIPPED
+  PARTIAL
+  DELIVERED
+  ARCHIVED
+}
+
+model Item {
+  id              Int       @id @default(autoincrement())
+  internalItemId  String    @unique
+  order           Order     @relation("OrderItems", fields: [orderId], references: [id])
+  orderId         Int
+  name            String
+  quantity        Int
+  price           Float     @default(0.0)
+  priceVerified   Boolean   @default(false)
+  carrier         String?
+  trackingId      String?
+  status          ItemStatus
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+enum ItemStatus {
+  TO_ORDER
+  PLACED
+  PROCESSED
+  SHIPPED
+  DELIVERED
+  PICKED_UP
+}
+
+model Document {
+  id        Int      @id @default(autoincrement())
+  url       String
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int
+  uploadedAt DateTime @default(now())
+}
