@@ -1,7 +1,7 @@
 import { google } from 'googleapis';
 import { NextRequest, NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
-import { loadOAuthClient } from '../../../lib/googleAuth';
+import { loadOAuthClient } from '../../../lib/google-auth';
 
 async function fetchEmails(auth: OAuth2Client, historyId: string) {
     const gmail = google.gmail({ version: 'v1', auth });

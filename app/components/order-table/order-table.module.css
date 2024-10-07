@@ -1,0 +1,44 @@
+.tableMainContainer{
+    background-color: white;
+}
+
+.tableContainer{
+    overflow-x: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tableBody{
+    width: 90%;
+    border-collapse: collapse;
+    background-color: white;
+    border: 1px solid #F2F2F2;
+    border-radius: 10px;
+}
+
+.tableHeader{
+    background-color: #F3F4F6;
+    height: 4rem;
+}
+
+.order{
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    height: 4rem;
+}
+
+.expandedOrder{
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.expandedOrderContent{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-right: 10px;
+    min-width: 200px;
+    flex: 0 0 auto;
+}

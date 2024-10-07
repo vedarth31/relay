@@ -38,6 +38,7 @@ model Order {
   vendor           String
   totalCost        Float     @default(0.0)
   costVerified     Boolean   @default(false)
+  comments         String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   items            Item[]    @relation("OrderItems")
@@ -63,6 +64,7 @@ model Item {
   quantity        Int
   price           Float     @default(0.0)
   priceVerified   Boolean   @default(false)
+  vendor          String
   carrier         String?
   trackingId      String?
   status          ItemStatus

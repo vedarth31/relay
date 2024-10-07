@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
-import { loadOAuthClient } from '../../../lib/googleAuth';
+import { loadOAuthClient } from '../../../lib/google-auth';
 
 
 export async function GET() {
