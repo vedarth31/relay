@@ -53,17 +53,23 @@ async function main() {
           {
             internalItemId: 'ITEM-2001',
             name: 'Lithium Cells',
+            partNumber: 'LC-100', // Added
+            notes: 'High capacity cells', // Added
             quantity: 100,
             price: 50.0,
             vendor: 'Battery Supplies Co.',
-            status: ItemStatus.TO_ORDER,
+            link: 'https://example.com/lithium-cells', // Added
+            status: ItemStatus.DELIVERED,
           },
           {
             internalItemId: 'ITEM-2002',
             name: 'Battery Management System',
+            partNumber: 'BMS-200', // Added
+            notes: null, // Added
             quantity: 1,
             price: 1000.0,
             vendor: 'Battery Supplies Co.',
+            link: null, // Added
             status: ItemStatus.TO_ORDER,
           },
         ],
@@ -86,17 +92,23 @@ async function main() {
           {
             internalItemId: 'ITEM-2003',
             name: 'Masking Tape',
+            partNumber: 'MT-500', // Added
+            notes: 'For painting', // Added
             quantity: 10,
             price: 54.0,
             vendor: 'Office Supplies Co.',
+            link: 'https://example.com/masking-tape', // Added
             status: ItemStatus.PLACED,
           },
           {
             internalItemId: 'ITEM-2004',
             name: 'Go Cart',
+            partNumber: 'GC-700', // Added
+            notes: null, // Added
             quantity: 2,
             price: 900.0,
             vendor: 'Sports Equipment Inc.',
+            link: null, // Added
             status: ItemStatus.PROCESSED,
           },
         ],

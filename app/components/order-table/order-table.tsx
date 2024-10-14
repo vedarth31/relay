@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import styles from './order-table.module.css'
+import OrderForm from '../order-form/order-form';
 
-interface SerializedOrderWithRelations {
+export interface SerializedOrderWithRelations {
     id: number;
     internalOrderId: string;
     meenOrderId: string | null;
@@ -28,17 +29,20 @@ interface SerializedOrderWithRelations {
         id: number;
         internalItemId: string;
         name: string;
+        partNumber: string;
+        notes: string | null;
         quantity: number;
         price: number;
         priceVerified: boolean;
         vendor: string;
+        link: string | null;
         carrier: string | null;
         trackingId: string | null;
         status: string;
         createdAt: string;
         updatedAt: string;
     }[];
-}
+}  
 
 interface OrderTableProps {
     orders: SerializedOrderWithRelations[];
@@ -48,6 +52,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
     const [expandedOrderIds, setExpandedOrderIds] = useState<number[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredOrders, setFilteredOrders] = useState<SerializedOrderWithRelations[]>(orders);
+    const [showOrderForm, setShowOrderForm] = useState(false);
 
     const toggleExpand = (orderId: number) => {
         setExpandedOrderIds((prev) =>
@@ -81,7 +86,7 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
     return (
         <div className={styles.tableMainContainer}>
             <h1>Purchase Orders</h1>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+            <div className={styles.tableSearch}>
                 <input
                 type="text"
                 placeholder="Search..."
@@ -89,7 +94,11 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
                 onChange={handleSearch}
                 style={{ padding: '5px', fontSize: '16px' }}
                 />
+                <button className={styles.orderButton} onClick={() => setShowOrderForm(true)}>
+                    Place Order
+                </button>
             </div>
+            {showOrderForm && <OrderForm onClose={() => setShowOrderForm(false)}/>}
             <div className={styles.tableContainer}>
                 <table className={styles.tableBody}>
                     <thead className={styles.tableHeader}>

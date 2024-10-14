@@ -22,6 +22,12 @@
     height: 4rem;
 }
 
+.tableSearch{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
 .order{
     cursor: pointer;
     border-bottom: 1px solid #ccc;

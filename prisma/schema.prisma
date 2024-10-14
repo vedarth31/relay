@@ -61,10 +61,13 @@ model Item {
   order           Order     @relation("OrderItems", fields: [orderId], references: [id])
   orderId         Int
   name            String
+  partNumber      String
+  notes           String?
   quantity        Int
   price           Float     @default(0.0)
   priceVerified   Boolean   @default(false)
   vendor          String
+  link            String?
   carrier         String?
   trackingId      String?
   status          ItemStatus
