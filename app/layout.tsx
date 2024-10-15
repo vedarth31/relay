@@ -1,20 +1,18 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import './globals.css';
 
-export const metadata: Metadata = {
-  title: "Order Management System",
+export const metadata = {
+  title: 'Order Management System',
+  description: 'TAMU Formula Electric Order Management System',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className=""
-      >
+      <body>
         {children}
       </body>
     </html>

@@ -1,5 +1,6 @@
-import prisma from "./lib/prisma"
+import prisma from "./lib/prisma";
 import OrderTable from "./components/order-table/order-table";
+import Layout from "./components/layout/layout";
 
 export default async function Dashboard(){
     const orders = await prisma.order.findMany({
@@ -28,5 +29,9 @@ export default async function Dashboard(){
         })),
     }));
     
-    return <OrderTable orders={serializedOrders} />;
+    return (
+        <Layout>
+            <OrderTable orders={serializedOrders} />
+        </Layout>
+    );
 }

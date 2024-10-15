@@ -1,5 +1,6 @@
 import BacklogComponent from "../components/backlog-component/backlog-component";
 import prisma from "../lib/prisma";
+import Layout from "../components/layout/layout";
 
 export default async function Backlog() {
     const orders = await prisma.order.findMany({
@@ -50,5 +51,9 @@ export default async function Backlog() {
         },
     }));
 
-    return <BacklogComponent orders={serializedOrders} items={serializedItems} />;
+    return (
+        <Layout>
+            <BacklogComponent orders={serializedOrders} items={serializedItems} />
+        </Layout>
+    );
 }
