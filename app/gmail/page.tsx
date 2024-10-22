@@ -1,6 +1,5 @@
 "use client"
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { Key, useEffect, useState } from 'react';
 import sanitizeHtml from 'sanitize-html';
@@ -28,6 +27,8 @@ interface Email {
 
 const GmailComponent = () => {
     const [emails, setEmails] = useState<Email[]>([]);
+
+    // const test_history_id = process.env.TEST_HISTORY_ID;
 
     useEffect(() => {
         // sse connection
@@ -78,6 +79,32 @@ const GmailComponent = () => {
                     )
                 );
 
+                const updateData = {
+                    meenId: llmData.meenId || '', 
+                    orderStatus: llmData.orderStatus || '',
+                    itemName: llmData.itemName || '',
+                    vendorName: llmData.vendorName || '',
+                };
+
+
+                const updateResponse = await fetch('/api/orders/update', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updateData),
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Failed to update order');
+                }
+
+                console.log("Order updated successfully");
+
+
+                // console.log(process.env.DATABASE_URL);
+
+
             } catch (err) {
                 console.error('Error fetching emails:', err);
             }
@@ -124,7 +151,7 @@ const GmailComponent = () => {
                         <p className="font-semibold mb-2"><strong>Vendor name:</strong> {email.vendorName || "None"}</p>
 
                         <h2 className="font-semibold text-lg mt-6">Attachments ({email.attachments?.length || 0})</h2>
-                        <ul>
+                        {/* <ul>
                             {email.attachments?.map((attachment, i) => (
                                 <li key={i} className="mb-4">
                                     {attachment.mimeType.startsWith('image/') ? (
@@ -151,7 +178,7 @@ const GmailComponent = () => {
                                     )}
                                 </li>
                             ))}
-                        </ul>
+                        </ul> */}
                     </li>
                 ))}
             </ul>
