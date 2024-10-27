@@ -86,7 +86,7 @@ export default function OrderForm({onClose} : {onClose: () => void}){
             }
     };
 
-    const screens  = [<Method onButtonClick={handleNextClick} onClose={onClose}/>, <Upload onSubmit={handleFileUpload} onClose={onClose}/>]
+    const screens  = [<Method key='method' onButtonClick={handleNextClick} onClose={onClose}/>, <Upload key='upload' onSubmit={handleFileUpload} onClose={onClose}/>]
 
     return screens[currentScreen]
 }

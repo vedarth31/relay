@@ -15,7 +15,7 @@ interface OrderDetails {
     vendorName: string
 }
 
-export async function parseData(query: string): Promise<OrderDetails | null> {
+async function parseData(query: string): Promise<OrderDetails | null> {
 
     const schema = {
         meenId: { title: "MEEN Order Id", type: "string" },
@@ -113,10 +113,10 @@ export async function parseData(query: string): Promise<OrderDetails | null> {
 }
 
 export async function GET(req: NextRequest) {
-    try {
-        const { searchParams } = new URL(req.url);
-        const query = searchParams.get('query');
 
+    const query = req.nextUrl.searchParams.get('historyId');
+
+    try {
         if (!query) {
             return NextResponse.json({ error: 'Missing query parameter' }, { status: 400 });
         }

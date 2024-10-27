@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import { parse } from 'csv-parse/sync';
 import { ItemStatus, OrderStatus } from '@prisma/client';
-import { getServerSession } from 'next-auth';
 
 export async function POST(request: NextRequest) {
 

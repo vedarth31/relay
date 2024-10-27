@@ -74,7 +74,7 @@ async function extractEmailData(
   return { body, attachments };
 }
 
-export async function fetchEmails(
+async function fetchEmails(
   auth: OAuth2Client,
   historyId: string
 ): Promise<CompleteEmailData[]> {
@@ -126,10 +126,10 @@ export async function fetchEmails(
 }
 
 export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const historyId = searchParams.get('historyId');
 
+  const historyId = req.nextUrl.searchParams.get('historyId');
+
+  try {
     if (!historyId) {
       return NextResponse.json({ error: 'Missing historyId parameter' }, { status: 400 });
     }
